@@ -1,4 +1,4 @@
-FROM teamcity-base:latest
+FROM jetbrains/teamcity-base:latest
 MAINTAINER Kateryna Shlyakhovetska <shkate@jetbrains.com>
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
