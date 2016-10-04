@@ -13,6 +13,9 @@ If you need to build your own image you need to perform the following action
 docker pull jetbrains/teamcity-base
 docker tag jetbrains/teamcity-base teamcity-base
 ```
+
+You can use your own base image with operation system you like and JAVA installed. TeamCity relies on environment variable JRE_HOME. Just tag your own image with ```teamcity-base``` tag.
+
 2. Extract TeamCity.tar.gz of any version you like to use into folder ```dist/teamcity``` folder. In the same directory where Dockerfile is place run
 ```
 mkdir dist
@@ -26,4 +29,4 @@ docker build -t teamcity-server .
 ```
 
 
-See our detailed instruction on Docker Hub Repository how to use the image.
+Please check our detailed instruction how to use this image on [jetbrains/teamcity-server](https://hub.docker.com/r/jetbrains/teamcity-server/) Docker Hub Repository page.
