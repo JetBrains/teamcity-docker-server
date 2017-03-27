@@ -10,7 +10,7 @@ LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
 COPY run-services.sh /run-services.sh
-RUN chmod +x /run-services.sh
+RUN chmod +x /run-services.sh && sync
 COPY dist/teamcity $TEAMCITY_DIST
 
 VOLUME $TEAMCITY_DATA_PATH \
