@@ -1,21 +1,15 @@
 #!/bin/bash
 
-shutdown() {
-    ${TEAMCITY_DIST}/bin/teamcity-server.sh stop
-    exit 0
-}
+echo '/run-services.sh'
 
-rm -f ${TEAMCITY_LOGS}/*.pid
-
-trap 'shutdown' SIGTERM SIGINT SIGHUP
-
-${TEAMCITY_DIST}/bin/teamcity-server.sh start
-
-while [ ! -f ${TEAMCITY_DIST}/logs/teamcity-server.log ];
+for entry in /services/*.sh
 do
-   echo -n "."
-   sleep 1
+  echo "$entry"
+  if [[ -f "$entry" ]]; then
+      [[ ! -x "$entry" ]] && (chmod +x "$entry"; sync)
+      "$entry"
+  fi
 done
 
-tail -F ${TEAMCITY_DIST}/logs/teamcity-server.log &
-wait
+echo '/run-agent.sh'
+exec '/run-server.sh'
