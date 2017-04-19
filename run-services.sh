@@ -11,5 +11,5 @@ do
   fi
 done
 
-echo '/run-agent.sh'
+echo '/run-server.sh'
 exec '/run-server.sh'
