@@ -8,7 +8,7 @@
 rm -f "${TEAMCITY_LOGS}/*.pid"
 
 if [[ "$TEAMCITY_CONTEXT" != "ROOT" ]]; then
-    current = "$(ls ${TEAMCITY_DIST}/webapps | head -1)"
+    current="$(ls ${TEAMCITY_DIST}/webapps | head -1)"
     [[ "$current" != "$TEAMCITY_CONTEXT" ]] && mv "${TEAMCITY_DIST}/webapps/$current" "${TEAMCITY_DIST}/webapps/$TEAMCITY_CONTEXT"
 fi
 
