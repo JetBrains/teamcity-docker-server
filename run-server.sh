@@ -7,10 +7,10 @@
 
 rm -f "${TEAMCITY_LOGS}/*.pid"
 
-# Unless TW-49741 fixed
-"${TEAMCITY_DIST}/bin/teamcity-server.sh" configure
-# Reconfigure
-"${TEAMCITY_DIST}/bin/teamcity-server.sh" configure "--context=$TEAMCITY_CONTEXT"
+if [[ "$TEAMCITY_CONTEXT" != "ROOT" ]]; then
+    current = "$(ls ${TEAMCITY_DIST}/webapps | head -1)"
+    [[ "$current" != "$TEAMCITY_CONTEXT" ]] && mv "${TEAMCITY_DIST}/webapps/$current" "${TEAMCITY_DIST}/webapps/$TEAMCITY_CONTEXT"
+fi
 
 trap "'${TEAMCITY_DIST}/bin/teamcity-server.sh' stop; exit 0;" SIGTERM SIGINT SIGHUP
 
