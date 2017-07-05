@@ -5,7 +5,7 @@
 : ${TEAMCITY_LOGS:=${TEAMCITY_DIST}/logs}
 : ${TEAMCITY_CONTEXT:=ROOT}
 
-rm -f "${TEAMCITY_LOGS}/*.pid"
+find "${TEAMCITY_LOGS}" -maxdepth 1 -type f -name '*.pid' -exec rm -f '{}' \;
 
 if [[ "$TEAMCITY_CONTEXT" != "ROOT" ]]; then
     current="$(ls ${TEAMCITY_DIST}/webapps | head -1)"
