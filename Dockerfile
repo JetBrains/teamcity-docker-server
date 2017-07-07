@@ -9,6 +9,10 @@ EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
+COPY welcome.sh /welcome.sh
+RUN chmod +x /welcome.sh && sync && \
+    echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
+
 COPY run-server.sh /run-server.sh
 COPY run-services.sh /run-services.sh
 RUN chmod +x /run-server.sh /run-services.sh && sync
