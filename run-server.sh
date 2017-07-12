@@ -17,13 +17,7 @@ fi
 # Set traps to gently shutdown server on `docker stop`, `docker restart` or `docker kill -s 15`
 trap "'${TEAMCITY_DIST}/bin/teamcity-server.sh' stop ${TEAMCITY_STOP_WAIT_TIME} -force; exit \$?" TERM INT HUP
 
-"${TEAMCITY_DIST}/bin/teamcity-server.sh" start
-
-while [ ! -f "${TEAMCITY_DIST}/logs/teamcity-server.log" ];
-do
-   echo -n "."
-   sleep 1
-done
-
-tail -F "${TEAMCITY_DIST}/logs/teamcity-server.log" &
-wait
+# & and wait required for traps to work
+"${TEAMCITY_DIST}/bin/teamcity-server.sh" run &
+wait $!
+exit $?
