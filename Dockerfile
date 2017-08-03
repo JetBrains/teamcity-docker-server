@@ -1,5 +1,6 @@
 FROM teamcity-base:latest
 MAINTAINER Kateryna Shlyakhovetska <shkate@jetbrains.com>
+MAINTAINER Vladislav Rassokhin <vladislav.rassokhin@jetbrains.com>
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
@@ -8,6 +9,10 @@ ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
 EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
+
+RUN apt-get update && \
+    apt-get install -y git mercurial ca-certificates && \
+    apt-get clean all
 
 COPY welcome.sh /welcome.sh
 RUN chmod +x /welcome.sh && sync && \
