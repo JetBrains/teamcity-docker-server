@@ -36,7 +36,5 @@ or better yet, in a new image based on this one:
    FROM jetbrains/teamcity-server
    COPY my-special-setup-script.sh /services/
    ```
-    
-
 
 See our [detailed instructions](https://hub.docker.com/r/jetbrains/teamcity-server/) on how to use the image in the Docker Hub repository .
