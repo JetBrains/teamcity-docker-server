@@ -1,3 +1,5 @@
+
+[![official JetBrains project](http://jb.gg/badges/official-plastic.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ## TeamCity Server Image Dockerfile
 
 This project contains the Dockerfile and all necessary scripts to build the Docker image and run a TeamCity server inside the container.
