@@ -21,9 +21,7 @@ FROM teamcity-base:latest-windowsservercore
 
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
-    TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity" \
-    GIT_HOME="C:\Program Files\Git" \
-    HG_HOME="C:\Program Files\Mercurial"
+    TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity"
 
 EXPOSE 8111
 
@@ -31,9 +29,9 @@ VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
 
 COPY --from=base $TEAMCITY_DIST $TEAMCITY_DIST
-COPY --from=base $GIT_HOME $GIT_HOME
-COPY --from=base $HG_HOME $HG_HOME
+COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
+COPY --from=base ["C:/Program Files/Mercurial", "C:/Program Files/Mercurial"]
 
-RUN setx /M PATH "%PATH%;%GIT_HOME%\cmd;%HG_HOME%"
+RUN setx /M PATH "%PATH%;C:\Program Files\Git\cmd;C:\Program Files\Mercurial"
 
 CMD powershell C:/TeamCity/run-server.ps1
