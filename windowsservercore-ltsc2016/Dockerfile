@@ -1,4 +1,4 @@
-FROM teamcity-base:latest-windowsservercore AS base
+FROM teamcity-base:latest-windowsservercore-ltsc2016 AS base
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -17,7 +17,7 @@ RUN Invoke-WebRequest https://bitbucket.org/tortoisehg/files/downloads/mercurial
     Start-Process msiexec -Wait -ArgumentList /q, /i, hg.msi ; \
     Remove-Item -Force hg.msi
 
-FROM teamcity-base:latest-windowsservercore
+FROM teamcity-base:latest-windowsservercore-ltsc2016
 
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \

@@ -1,6 +1,6 @@
-FROM teamcity-server:latest-windowsservercore AS base
+FROM teamcity-server:latest-windowsservercore-ltsc2016 AS base
 
-FROM teamcity-base:latest-nanoserver
+FROM teamcity-base:latest-nanoserver-sac2016
 
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
