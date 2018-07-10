@@ -1,4 +1,6 @@
-FROM microsoft/windowsservercore:ltsc2016 AS base
+ARG TAG=1803
+
+FROM microsoft/windowsservercore:$TAG AS base
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -18,7 +20,7 @@ ADD TeamCity-*.tar.gz /
 RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-$TAG" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
-FROM teamcity-base:latest-nanoserver-sac2016
+FROM teamcity-base:latest-nanoserver-$TAG
 
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
@@ -33,6 +35,9 @@ COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
 COPY --from=base ["C:/Program Files/Mercurial", "C:/Program Files/Mercurial"]
 COPY --from=base $TEAMCITY_DIST $TEAMCITY_DIST
 
+# In order to set system PATH, ContainerAdministrator must be used
+USER ContainerAdministrator
 RUN setx /M PATH "%PATH%;C:\Program Files\Git\cmd;C:\Program Files\Mercurial"
+USER ContainerUser
 
-CMD powershell C:/TeamCity/run-server.ps1
+CMD pwsh C:/TeamCity/run-server.ps1
