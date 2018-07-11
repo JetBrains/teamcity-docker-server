@@ -22,6 +22,9 @@ COPY run-server.ps1 /TeamCity/run-server.ps1
 
 FROM teamcity-base:latest-nanoserver-$TAG
 
+COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
+COPY --from=base ["C:/Program Files/Mercurial", "C:/Program Files/Mercurial"]
+
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
     TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity"
@@ -31,13 +34,11 @@ EXPOSE 8111
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
 
-COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
-COPY --from=base ["C:/Program Files/Mercurial", "C:/Program Files/Mercurial"]
 COPY --from=base $TEAMCITY_DIST $TEAMCITY_DIST
+
+CMD pwsh C:/TeamCity/run-server.ps1
 
 # In order to set system PATH, ContainerAdministrator must be used
 USER ContainerAdministrator
 RUN setx /M PATH "%PATH%;C:\Program Files\Git\cmd;C:\Program Files\Mercurial"
 USER ContainerUser
-
-CMD pwsh C:/TeamCity/run-server.ps1
