@@ -15,7 +15,7 @@ RUN Invoke-WebRequest https://bitbucket.org/tortoisehg/files/downloads/mercurial
 
 # Prepare TeamCity server distribution
 ADD TeamCity-*.tar.gz /
-RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-$TAG" | Out-Null
+RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-sac2016" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
 FROM teamcity-base:latest-nanoserver-sac2016
