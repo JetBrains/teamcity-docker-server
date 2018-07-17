@@ -4,6 +4,8 @@ FROM microsoft/windowsservercore:$TAG AS base
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
+ARG TAG=$TAG
+
 # Install Git
 RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
     Invoke-WebRequest https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip -OutFile git.zip; \
@@ -17,7 +19,7 @@ RUN Invoke-WebRequest https://bitbucket.org/tortoisehg/files/downloads/mercurial
 
 # Prepare TeamCity server distribution
 ADD TeamCity-*.tar.gz /
-RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-$TAG" | Out-Null
+RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-${env:TAG}" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
 FROM teamcity-base:latest-nanoserver-$TAG
