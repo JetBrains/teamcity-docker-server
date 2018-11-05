@@ -12,11 +12,6 @@ RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
     Expand-Archive git.zip -DestinationPath $Env:ProgramFiles\Git ; \
     Remove-Item -Force git.zip
 
-# Install Mercurial
-RUN Invoke-WebRequest https://bitbucket.org/tortoisehg/files/downloads/mercurial-4.6.1-x64.msi -OutFile hg.msi; \
-    Start-Process msiexec -Wait -ArgumentList /q, /i, hg.msi ; \
-    Remove-Item -Force hg.msi
-
 # Prepare TeamCity server distribution
 ADD TeamCity-*.tar.gz /
 RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-${env:TAG}" | Out-Null
@@ -25,7 +20,6 @@ COPY run-server.ps1 /TeamCity/run-server.ps1
 FROM teamcity-base:latest-nanoserver-$TAG
 
 COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
-COPY --from=base ["C:/Program Files/Mercurial", "C:/Program Files/Mercurial"]
 
 ENV TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
@@ -42,5 +36,5 @@ CMD pwsh C:/TeamCity/run-server.ps1
 
 # In order to set system PATH, ContainerAdministrator must be used
 USER ContainerAdministrator
-RUN setx /M PATH "%PATH%;C:\Program Files\Git\cmd;C:\Program Files\Mercurial"
+RUN setx /M PATH "%PATH%;C:\Program Files\Git\cmd"
 USER ContainerUser
