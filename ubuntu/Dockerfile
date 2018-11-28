@@ -11,9 +11,15 @@ LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 323293EE && \
-    echo "deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu xenial main" > /etc/apt/sources.list.d/mercurial.list
+    echo "deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu xenial main" > /etc/apt/sources.list.d/mercurial.list && \
+    wget -qO - https://package.perforce.com/perforce.pubkey | apt-key add - && \
+    echo "deb http://package.perforce.com/apt/ubuntu xenial release" > /etc/apt/sources.list.d/peforce.list
 RUN apt-get update && \
-    apt-get install -y git mercurial ca-certificates && \
+    apt-get install -y \
+    git \ 
+    mercurial \
+    helix-cli \
+    ca-certificates && \
     apt-get clean all
 
 COPY welcome.sh /welcome.sh
