@@ -13,7 +13,11 @@ LABEL dockerImage.teamcity.version="latest" \
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 323293EE && \
     echo "deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu xenial main" > /etc/apt/sources.list.d/mercurial.list
 RUN apt-get update && \
-    apt-get install -y git mercurial ca-certificates && \
+    apt-get install -y \
+    git \
+    mercurial \
+    apt-transport-https \
+    ca-certificates && \
     apt-get clean all
 
 COPY welcome.sh /welcome.sh
