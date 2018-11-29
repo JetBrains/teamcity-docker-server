@@ -11,13 +11,7 @@ You can pull the ready-to-use image from the Docker Hub repository
 
 If you need to build your own image, you need to perform the following:
 
-1) Create your own base image with the operation system of your choice and Java 8 installed.
-   Export `JRE_HOME` environment variable since TeamCity requires it for start.
-   [Build and tag it](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t) with the `teamcity-base` tag.
-
-   Note: Use `teamcity-base:latest-nanoserver-*` tags for Windows images.
-
-2) On Unix extract `TeamCity.tar.gz` of any version you'd like to use into  the `dist/teamcity` folder. In the same directory where the Dockerfile is placed, run
+1) On Unix extract `TeamCity.tar.gz` of any version you'd like to use into  the `dist/teamcity` folder. In the same directory where the Dockerfile is placed, run
 
    ```
      mkdir dist
@@ -27,7 +21,7 @@ If you need to build your own image, you need to perform the following:
    
    On Windows just put `TeamCity.tar.gz` into the repository root.
    
-3) Run the `docker build` command:
+2) Run the `docker build` command:
    ```
     docker build -t teamcity-server
    ```

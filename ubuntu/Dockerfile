@@ -1,4 +1,4 @@
-FROM teamcity-base:latest
+FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
 MAINTAINER Kateryna Shlyakhovetska <shkate@jetbrains.com>
 MAINTAINER Vladislav Rassokhin <vladislav.rassokhin@jetbrains.com>
 
