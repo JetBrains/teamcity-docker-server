@@ -10,8 +10,6 @@ EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 323293EE && \
-    echo "deb http://ppa.launchpad.net/mercurial-ppa/releases/ubuntu xenial main" > /etc/apt/sources.list.d/mercurial.list
 RUN apt-get update && \
     apt-get install -y git mercurial ca-certificates && \
     apt-get clean all
