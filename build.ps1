@@ -1,5 +1,5 @@
 # Build semi annual images
-$tags = @("1803")
+$tags = @("1809")
 foreach ($tag in $tags) {
  docker build `
  --build-arg TAG=$tag `
