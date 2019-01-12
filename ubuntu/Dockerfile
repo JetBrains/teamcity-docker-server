@@ -10,9 +10,26 @@ EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
-RUN apt-get update && \
-    apt-get install -y git mercurial ca-certificates && \
-    apt-get clean all
+RUN buildDeps=' \
+        gnupg \
+    ' \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends $buildDeps \
+    && curl -fsSL https://package.perforce.com/perforce.pubkey | apt-key add - \
+    && mkdir -p /etc/apt/sources.list.d \
+    && ( \
+        . /etc/os-release && \
+        echo "deb http://package.perforce.com/apt/$ID $VERSION_CODENAME release" \ 
+	 > /etc/apt/sources.list.d/perforce.list \
+    ) \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git \
+        helix-cli \
+        mercurial \
+    && apt-get purge -y --auto-remove $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY welcome.sh /welcome.sh
 RUN chmod +x /welcome.sh && sync && \
