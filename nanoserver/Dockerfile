@@ -1,6 +1,6 @@
 ARG TAG=1803
 
-FROM microsoft/powershell:nanoserver-$TAG AS base
+FROM mcr.microsoft.com/powershell:nanoserver-$TAG AS base
 
 SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -35,7 +35,7 @@ ADD TeamCity-*.tar.gz /
 RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-${env:TAG}" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
-FROM microsoft/powershell:nanoserver-$TAG
+FROM mcr.microsoft.com/powershell:nanoserver-$TAG
 
 COPY --from=base ["C:/Program Files/Java/OpenJDK", "C:/Program Files/Java/OpenJDK"]
 COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
