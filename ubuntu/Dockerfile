@@ -1,11 +1,9 @@
 FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
-MAINTAINER Kateryna Shlyakhovetska <shkate@jetbrains.com>
-MAINTAINER Vladislav Rassokhin <vladislav.rassokhin@jetbrains.com>
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
     TEAMCITY_LOGS=/opt/teamcity/logs \
-    LANG=en_US.UTF-8
+    LANG=C.UTF-8
 
 EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
