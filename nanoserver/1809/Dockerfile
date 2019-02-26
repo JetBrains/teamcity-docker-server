@@ -1,10 +1,6 @@
-ARG TAG=1803
-
-FROM mcr.microsoft.com/powershell:nanoserver-$TAG AS base
+FROM mcr.microsoft.com/powershell:nanoserver-1809 AS base
 
 SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
-
-ARG TAG=$TAG
 
 # Install JRE
 RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
@@ -35,7 +31,33 @@ ADD TeamCity-*.tar.gz /
 RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-${env:TAG}" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
-FROM mcr.microsoft.com/powershell:nanoserver-$TAG
+# Workaround for https://github.com/PowerShell/PowerShell-Docker/issues/164
+FROM mcr.microsoft.com/windows/nanoserver:1809
+
+ENV ProgramFiles="C:\Program Files" \
+    # set a fixed location for the Module analysis cache
+    LOCALAPPDATA="C:\Users\ContainerAdministrator\AppData\Local" \
+    PSModuleAnalysisCachePath="$LOCALAPPDATA\Microsoft\Windows\PowerShell\docker\ModuleAnalysisCache" \
+    # Persist %PSCORE% ENV variable for user convenience
+    PSCORE="$ProgramFiles\PowerShell\pwsh.exe"
+
+COPY --from=base ["C:/Program Files/PowerShell", "C:/Program Files/PowerShell"]
+
+# In order to set system PATH, ContainerAdministrator must be used
+USER ContainerAdministrator
+RUN setx /M PATH "%PATH%;%ProgramFiles%\PowerShell"
+USER ContainerUser
+
+# intialize powershell module cache
+RUN pwsh -NoLogo -NoProfile -Command " \
+    $stopTime = (get-date).AddMinutes(15); \
+    $ErrorActionPreference = 'Stop' ; \
+    $ProgressPreference = 'SilentlyContinue' ; \
+    while(!(Test-Path -Path $env:PSModuleAnalysisCachePath)) {  \
+        Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
+        if((get-date) -gt $stopTime) { throw 'timout expired'} \
+        Start-Sleep -Seconds 6 ; \
+    }"
 
 COPY --from=base ["C:/Program Files/Java/OpenJDK", "C:/Program Files/Java/OpenJDK"]
 COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
