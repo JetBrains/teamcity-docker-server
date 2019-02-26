@@ -28,7 +28,7 @@ RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
 
 # Prepare TeamCity server distribution
 ADD TeamCity-*.tar.gz /
-RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-${env:TAG}" | Out-Null
+RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-1809" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
 # Workaround for https://github.com/PowerShell/PowerShell-Docker/issues/164
