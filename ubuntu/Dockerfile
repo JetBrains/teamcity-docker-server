@@ -1,34 +1,36 @@
 FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
-MAINTAINER Kateryna Shlyakhovetska <shkate@jetbrains.com>
-MAINTAINER Vladislav Rassokhin <vladislav.rassokhin@jetbrains.com>
 
 ARG JDBC_VER=8.0.13
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
-    TEAMCITY_LOGS=/opt/teamcity/logs
+    TEAMCITY_LOGS=/opt/teamcity/logs \
+    LANG=C.UTF-8
 
 EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
       dockerImage.teamcity.buildNumber="latest"
 
-# Install Perforce Key
-RUN apt-get update && \
-    apt-get install -y gnupg && \
-    . /etc/os-release && \
-    apt-key adv --fetch-keys https://package.perforce.com/perforce.pubkey && \
-    mkdir -p /etc/apt/sources.list.d && \
-    echo "deb http://package.perforce.com/apt/$ID $VERSION_CODENAME release" > /etc/apt/sources.list.d/perforce.list
-
-RUN apt-get update && \
-    apt-get install -y \
-    git \
-    mercurial \
-    ca-certificates \
-    helix-cli && \
-# It would be nice to use the version in the Ubuntu repo, but its not compatible with MySQL 8.0
-    #libmysql-java && \ 
-    apt-get clean all
+RUN buildDeps=' \
+        gnupg \
+    ' \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends $buildDeps \
+    && curl -fsSL https://package.perforce.com/perforce.pubkey | apt-key add - \
+    && mkdir -p /etc/apt/sources.list.d \
+    && ( \
+        . /etc/os-release && \
+        echo "deb http://package.perforce.com/apt/$ID $VERSION_CODENAME release" \ 
+	 > /etc/apt/sources.list.d/perforce.list \
+    ) \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git \
+        helix-cli \
+        mercurial \
+    && apt-get purge -y --auto-remove $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
 
 # Restore this if the libmysql-java package is updated
 #RUN mkdir -p $TEAMCITY_DATA_PATH/lib/jdbc && \
