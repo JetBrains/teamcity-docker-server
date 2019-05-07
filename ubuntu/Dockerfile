@@ -19,9 +19,13 @@ RUN chmod +x /welcome.sh && sync && \
 
 COPY run-server.sh /run-server.sh
 COPY run-services.sh /run-services.sh
-RUN chmod +x /run-server.sh /run-services.sh && sync
 COPY dist/teamcity $TEAMCITY_DIST
 
+RUN chmod +x /run-server.sh /run-services.sh && sync && \
+    groupadd -g 1000 tcuser && \
+    useradd -r -u 1000 -g tcuser tcuser && \
+    chown -R tcuser:tcuser $TEAMCITY_DIST
+    
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
 
