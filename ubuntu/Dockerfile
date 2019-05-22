@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
+FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u212-b03
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
@@ -25,7 +25,7 @@ RUN chmod +x /run-server.sh /run-services.sh && sync && \
     groupadd -g 1000 tcuser && \
     useradd -r -u 1000 -g tcuser tcuser && \
     chown -R tcuser:tcuser $TEAMCITY_DIST
-    
+
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
 
