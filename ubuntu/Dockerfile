@@ -14,18 +14,17 @@ RUN apt-get update && \
     apt-get clean all
 
 COPY welcome.sh /welcome.sh
-RUN chmod +x /welcome.sh && sync && \
-    echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
-
 COPY run-server.sh /run-server.sh
 COPY run-services.sh /run-services.sh
-COPY dist/teamcity $TEAMCITY_DIST
 
-RUN chmod +x /run-server.sh /run-services.sh && sync && \
+RUN chmod +x /welcome.sh /run-server.sh /run-services.sh && sync && \
     groupadd -g 1000 tcuser && \
     useradd -r -u 1000 -g tcuser tcuser && \
-    chown -R tcuser:tcuser $TEAMCITY_DIST
-    
+    echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
+
+COPY --chown=tcuser:tcuser dist/teamcity $TEAMCITY_DIST
+
+
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
 
