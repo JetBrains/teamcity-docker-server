@@ -3,6 +3,7 @@ FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
     TEAMCITY_LOGS=/opt/teamcity/logs \
+    TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=350m" \
     LANG=C.UTF-8
 
 EXPOSE 8111
