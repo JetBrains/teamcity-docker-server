@@ -39,7 +39,8 @@ COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
 ENV JRE_HOME="C:\Program Files\Java\OpenJDK" \
     TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
-    TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity"
+    TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity" \
+    TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=350m"
 
 EXPOSE 8111
 

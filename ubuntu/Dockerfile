@@ -5,6 +5,7 @@ ARG JDBC_VER=8.0.13
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
     TEAMCITY_LOGS=/opt/teamcity/logs \
+    TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=350m" \
     LANG=C.UTF-8
 
 EXPOSE 8111
@@ -43,13 +44,16 @@ tar -vxzf mysql_java_tmp/mysql.tar.gz -C $TEAMCITY_DATA_PATH/lib/jdbc/ --wildcar
 rm -rf mysql_java_tmp
 
 COPY welcome.sh /welcome.sh
-RUN chmod +x /welcome.sh && sync && \
-    echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
-
 COPY run-server.sh /run-server.sh
 COPY run-services.sh /run-services.sh
-RUN chmod +x /run-server.sh /run-services.sh && sync
-COPY dist/teamcity $TEAMCITY_DIST
+
+RUN chmod +x /welcome.sh /run-server.sh /run-services.sh && sync && \
+    groupadd -g 1000 tcuser && \
+    useradd -r -u 1000 -g tcuser tcuser && \
+    echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
+
+COPY --chown=tcuser:tcuser dist/teamcity $TEAMCITY_DIST
+
 
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS
