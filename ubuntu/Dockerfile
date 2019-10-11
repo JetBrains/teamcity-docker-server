@@ -1,5 +1,4 @@
 FROM adoptopenjdk:8u222-b10-jdk-hotspot
-#FROM adoptopenjdk/openjdk8:x86_64-ubuntu-jdk8u192-b12
 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
