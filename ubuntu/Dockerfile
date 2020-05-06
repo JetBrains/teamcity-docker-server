@@ -58,7 +58,7 @@ RUN chmod +x /welcome.sh /run-server.sh /run-services.sh && sync && \
     echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
 
 COPY --chown=tcuser:tcuser dist/teamcity $TEAMCITY_DIST
-
+RUN rm -rf $TEAMCITY_DIST/buildAgent
 
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS

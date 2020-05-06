@@ -28,6 +28,7 @@ RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
 
 # Prepare TeamCity server distribution
 ADD TeamCity-*.tar.gz /
+RUN Remove-Item -Recurse -Force /TeamCity/buildAgent
 RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-1903" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
