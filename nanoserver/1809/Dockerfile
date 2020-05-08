@@ -4,21 +4,10 @@ SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference
 
 # Install JRE
 RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
-    Invoke-WebRequest https://corretto.aws/downloads/resources/8.252.09.2/amazon-corretto-8.252.09.2-windows-x64-jre.zip -OutFile jre.zip; \
+    Invoke-WebRequest https://corretto.aws/downloads/latest/amazon-corretto-11-x64-windows-jdk.zip -OutFile jre.zip; \
     Expand-Archive jre.zip -DestinationPath $Env:ProgramFiles\Java ; \
     Get-ChildItem $Env:ProgramFiles\Java | Rename-Item -NewName "OpenJDK" ; \
     Remove-Item -Force jre.zip
-
-# Install tools from JDK
-RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
-    Invoke-WebRequest https://corretto.aws/downloads/resources/8.252.09.2/amazon-corretto-8.252.09.2-windows-x64-jdk.zip -OutFile jdk.zip; \
-    Expand-Archive jdk.zip -DestinationPath $Env:Temp\JDK ; \
-    Get-ChildItem $Env:Temp\JDK | Rename-Item -NewName "OpenJDK" ; \
-    ('jar.exe', 'jcmd.exe', 'jconsole.exe', 'jmap.exe', 'jstack.exe', 'jps.exe') | foreach { \
-         Copy-Item $Env:Temp\JDK\OpenJDK\bin\$_ $Env:ProgramFiles\Java\OpenJDK\bin\ \
-    } ; \
-    Remove-Item -Force -Recurse $Env:Temp\JDK ; \
-    Remove-Item -Force jdk.zip
 
 # Install Git
 RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
