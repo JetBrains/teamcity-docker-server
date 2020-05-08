@@ -10,8 +10,8 @@ RUN apt-get update \
 
 # JDK preparation start
 
-ARG MD5SUM='7e9925dbe18506ce35e226c3b4d05613'
-ARG JDK_URL='https://corretto.aws/downloads/resources/8.252.09.1/amazon-corretto-8.252.09.1-linux-x64.tar.gz'
+ARG MD5SUM='7fab667aba936ef21928ce5d079e2e4a'
+ARG JDK_URL='https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz'
 
 RUN set -eux; \
     curl -LfsSo /tmp/openjdk.tar.gz ${JDK_URL}; \
@@ -22,13 +22,12 @@ RUN set -eux; \
     rm -rf /tmp/openjdk.tar.gz;
 
 ENV JAVA_HOME=/opt/java/openjdk \
-    JRE_HOME=/opt/java/openjdk/jre \
     PATH="/opt/java/openjdk/bin:$PATH"
 
-RUN update-alternatives --install /usr/bin/java java ${JRE_HOME}/bin/java 1 && \
-    update-alternatives --set java ${JRE_HOME}/bin/java && \
-    update-alternatives --install /usr/bin/javac javac ${JRE_HOME}/../bin/javac 1 && \
-    update-alternatives --set javac ${JRE_HOME}/../bin/javac
+RUN update-alternatives --install /usr/bin/java java ${JAVA_HOME}/bin/java 1 && \
+    update-alternatives --set java ${JAVA_HOME}/bin/java && \
+    update-alternatives --install /usr/bin/javac javac ${JAVA_HOME}/bin/javac 1 && \
+    update-alternatives --set javac ${JAVA_HOME}/bin/javac
 
 # JDK preparation end
 ##################################
