@@ -11,7 +11,7 @@ RUN apt-get update \
 # JDK preparation start
 
 ARG MD5SUM='7fab667aba936ef21928ce5d079e2e4a'
-ARG JDK_URL='https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz'
+ARG JDK_URL='https://corretto.aws/downloads/resources/11.0.7.10.1/amazon-corretto-11.0.7.10.1-linux-x64.tar.gz'
 
 RUN set -eux; \
     curl -LfsSo /tmp/openjdk.tar.gz ${JDK_URL}; \
