@@ -29,15 +29,19 @@ COPY --from=base ["C:/Program Files/Git", "C:/Program Files/Git"]
 ENV JRE_HOME="C:\Program Files\Java\OpenJDK" \
     TEAMCITY_DIST="C:\TeamCity" \
     TEAMCITY_LOGS="C:\TeamCity\logs" \
+    TEAMCITY_TEMP="C:\TeamCity\temp" \
     TEAMCITY_DATA_PATH="C:\ProgramData\JetBrains\TeamCity" \
     TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=350m"
 
 EXPOSE 8111
 
-VOLUME $TEAMCITY_DATA_PATH \
-       $TEAMCITY_LOGS
-
 COPY --from=base $TEAMCITY_DIST $TEAMCITY_DIST
+
+RUN pwsh -NoLogo -NoProfile -Command Remove-Item $TEAMCITY_TEMP
+
+VOLUME $TEAMCITY_DATA_PATH \
+       $TEAMCITY_LOGS \
+       $TEAMCITY_TEMP
 
 CMD pwsh C:/TeamCity/run-server.ps1
 

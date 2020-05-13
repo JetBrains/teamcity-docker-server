@@ -36,6 +36,7 @@ RUN update-alternatives --install /usr/bin/java java ${JAVA_HOME}/bin/java 1 && 
 ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
     TEAMCITY_DIST=/opt/teamcity \
     TEAMCITY_LOGS=/opt/teamcity/logs \
+    TEAMCITY_TEMP=/opt/teamcity/temp \
     TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=350m" \
     LANG=C.UTF-8
 
@@ -57,9 +58,11 @@ RUN chmod +x /welcome.sh /run-server.sh /run-services.sh && sync && \
     echo '[ ! -z "$TERM" -a -x /welcome.sh -a -x /welcome.sh ] && /welcome.sh' >> /etc/bash.bashrc
 
 COPY --chown=tcuser:tcuser dist/teamcity $TEAMCITY_DIST
-RUN rm -rf $TEAMCITY_DIST/buildAgent
+RUN rm -rf $TEAMCITY_DIST/buildAgent && \
+    rm -rf $TEAMCITY_DIST/temp
 
 VOLUME $TEAMCITY_DATA_PATH \
-       $TEAMCITY_LOGS
+       $TEAMCITY_LOGS \
+       $TEAMCITY_TEMP
 
 CMD ["/run-services.sh"]
