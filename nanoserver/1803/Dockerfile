@@ -37,8 +37,6 @@ EXPOSE 8111
 
 COPY --from=base $TEAMCITY_DIST $TEAMCITY_DIST
 
-RUN pwsh -NoLogo -NoProfile -Command Remove-Item $TEAMCITY_TEMP
-
 VOLUME $TEAMCITY_DATA_PATH \
        $TEAMCITY_LOGS \
        $TEAMCITY_TEMP
