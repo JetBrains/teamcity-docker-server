@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:nanoserver-1809 AS base
+FROM mcr.microsoft.com/powershell:nanoserver-1903 AS base
 
 SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -19,11 +19,11 @@ RUN [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls' ; \
 ADD TeamCity-*.tar.gz /
 RUN Remove-Item -Recurse -Force /TeamCity/buildAgent
 RUN Remove-Item -Recurse -Force /TeamCity/temp
-RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-1809" | Out-Null
+RUN New-Item C:/TeamCity/webapps/ROOT/WEB-INF/DistributionType.txt -type file -force -value "docker-windows-1903" | Out-Null
 COPY run-server.ps1 /TeamCity/run-server.ps1
 
 # Workaround for https://github.com/PowerShell/PowerShell-Docker/issues/164
-FROM mcr.microsoft.com/windows/nanoserver:1809
+FROM mcr.microsoft.com/windows/nanoserver:1903
 
 ENV ProgramFiles="C:\Program Files" \
     # set a fixed location for the Module analysis cache
