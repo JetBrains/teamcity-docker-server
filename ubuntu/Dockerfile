@@ -42,7 +42,8 @@ ENV TEAMCITY_DATA_PATH=/data/teamcity_server/datadir \
 
 EXPOSE 8111
 LABEL dockerImage.teamcity.version="latest" \
-      dockerImage.teamcity.buildNumber="latest"
+      dockerImage.teamcity.buildNumber="latest" \
+      dockerImage.teamcity.server=
 
 RUN apt-get update && \
     apt-get install -y git mercurial ca-certificates && \
